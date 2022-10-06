@@ -1,0 +1,1 @@
+export let isPage = (pages) => !pages.includes(window.location.pathname);
