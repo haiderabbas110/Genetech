@@ -4,7 +4,7 @@ import Header from './Components/Header/Header'
 import Sidebar from './Components/Sidebar/Sidebar'
 import Login from './Components/Login/Login';
 import Register from './Components/Register/Register';
-import './App.css';
+import './app.scss';
 
 function App() {
   return (

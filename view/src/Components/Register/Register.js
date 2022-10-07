@@ -3,20 +3,41 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import registerStyle from "./register.module.scss";
+import axios from "axios";
+import { API_URL } from "../../Constants";
+import useForm from "../../useForm";
+import validate from '../../ValidationRule';
 
 const Register = () => {
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    values,
+    errors,
+    handleChange,
+    handleSubmit,
+  } = useForm(login, validate);
 
-  function validateForm() {
+  function login() {
+    console.log('No errors, submit callback called!');
+    const {
+      fname,
+      lname,
+      email,
+      phone,
+      password
+    } = values
 
-  }
+    return axios.post(API_URL + "user", {
+      'firstname' : fname,
+      'lastname' : lname,
+      'email' : email,
+      'phone' : phone,
+      'password' : password,
 
-  async function handleSubmit(event) {
+    })
+      .then((response) => {
 
+        return response.data;
+      });
   }
 
   return (
@@ -28,31 +49,45 @@ const Register = () => {
 
         </div>
         <div className={registerStyle.loginRight}>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} noValidate>
             <Form.Group size="lg" controlId="name">
               <Form.Label>First Name</Form.Label>
               <Form.Control
                 autoFocus
+                name="fname"
                 type="text"
-                value={fname}
-                onChange={(e) => setFname(e.target.value)}
+                placeholder={errors.fname && (errors.fname)}
+                value={values.fname || ''}
+                className={`input ${errors.fname && 'is-danger'}`}
+                onChange={handleChange}
+                required
               />
             </Form.Group>
             <Form.Group size="lg" controlId="name">
               <Form.Label>Last Name</Form.Label>
               <Form.Control
                 autoFocus
+                name="lname"
                 type="text"
-                value={lname}
-                onChange={(e) => setLname(e.target.value)}
+                placeholder={errors.lname && (errors.lname)}
+                value={values.lname || ''}
+                className={`input ${errors.lname && 'is-danger'}`}
+                onChange={handleChange}
+                required
               />
+              
             </Form.Group>
             <Form.Group size="lg" controlId="password">
               <Form.Label>Email</Form.Label>
               <Form.Control
+                autoFocus
+                name="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder={errors.email && (errors.email)}
+                value={values.email || ''}
+                className={`input ${errors.email && 'is-danger'}`}
+                onChange={handleChange}
+                required
               />
             </Form.Group>
 
@@ -60,20 +95,29 @@ const Register = () => {
               <Form.Label>Phone</Form.Label>
               <Form.Control
                 autoFocus
+                name="phone"
                 type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                placeholder={errors.phone && (errors.phone)}
+                value={values.phone || ''}
+                className={`input ${errors.phone && 'is-danger'}`}
+                onChange={handleChange}
+                required
               />
             </Form.Group>
 
             <Form.Group size="lg" controlId="password">
               <Form.Label>Password</Form.Label>
               <Form.Control
+                autoFocus
+                name="password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                placeholder={errors.password && (errors.password)}
+                value={values.password || ''}
+                className={`input ${errors.email && 'is-danger'}`}
+                onChange={handleChange}
+                required
               />
-              <Button size="lg" type="submit" disabled={!validateForm()}>
+              <Button size="lg" type="submit">
                 <span className="spinner-border spinner-border-sm"></span>
               </Button>
             </Form.Group>
