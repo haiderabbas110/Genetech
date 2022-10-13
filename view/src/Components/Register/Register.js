@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
@@ -17,7 +17,6 @@ const Register = () => {
   } = useForm(login, validate);
 
   function login() {
-    console.log('No errors, submit callback called!');
     const {
       fname,
       lname,
@@ -25,19 +24,29 @@ const Register = () => {
       phone,
       password
     } = values
+    try {
+      axios.post(API_URL + "user", {
+        'firstname': fname,
+        'lastname': lname,
+        'email': email,
+        'phone': phone,
+        'password': password,
+      })
+        .then((response) => {
+          console.log(response);
+          return response.data;
+        }).catch(function (error) {
+          if (error.response) {
+            console.log(error.response.data.message);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          }
+        });
+    } catch (err) {
+      console.log("eraklsdfjklasjdf");
+      console.log(err);
+    }
 
-    return axios.post(API_URL + "user", {
-      'firstname' : fname,
-      'lastname' : lname,
-      'email' : email,
-      'phone' : phone,
-      'password' : password,
-
-    })
-      .then((response) => {
-
-        return response.data;
-      });
   }
 
   return (
@@ -75,7 +84,7 @@ const Register = () => {
                 onChange={handleChange}
                 required
               />
-              
+
             </Form.Group>
             <Form.Group size="lg" controlId="password">
               <Form.Label>Email</Form.Label>
